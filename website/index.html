@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trackify Songs</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>All Songs</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artist</th>
+                <th>Album</th>
+                <th>Datum</th>
+                <th>Uhrzeit</th>
+            </tr>
+        </thead>
+        <tbody id="all-songs">
+            <!-- Songs werden hier dynamisch hinzugefügt -->
+        </tbody>
+    </table>
+
+    <script>
+        async function fetchAllSongs() {
+            const response = await fetch('http://192.168.2.108:5000/trackify/get-all-songs');
+            const data = await response.json();
+            return data.songs;
+        }
+
+        async function displaySongs() {
+            const allSongs = await fetchAllSongs();
+            const allSongsTable = document.getElementById('all-songs');
+            
+            allSongs.forEach(song => {
+                const row = allSongsTable.insertRow();
+                const titleCell = row.insertCell(0);
+                const artistCell = row.insertCell(1);
+                const albumCell = row.insertCell(2);
+                const dateCell = row.insertCell(3);
+                const timeCell = row.insertCell(4);
+
+                titleCell.textContent = song[1];
+                artistCell.textContent = song[2];
+                albumCell.textContent = song[3];
+                dateCell.textContent = song[4];
+                timeCell.textContent = song[5];
+            });
+        }
+
+        displaySongs();
+    </script>
+</body>
+</html>
+
